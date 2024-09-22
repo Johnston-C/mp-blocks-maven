@@ -65,7 +65,9 @@ public class Grid implements AsciiBlock {
     String output = "";
     if(i>=0 && i< this.height()){
       output = output.concat(this.element.row(i%this.element.height()));
-    }
+    } else {
+      throw new Exception("Invalid row " + i);
+    } // if / else
     return output;
   } // row(int)
 

@@ -71,7 +71,29 @@ public class HComp implements AsciiBlock {
    *   if i is outside the range of valid rows.
    */
   public String row(int i) throws Exception {
-    return "";  // STUB
+    if (i < 0 || i >= height()) {
+      throw new Exception("Invalid row index.");
+    }
+    String composedRow = ""; // Start with an empty string
+    for (AsciiBlock block : blocks) {
+      int blockHeight = block.height();
+      int rowIndex;
+      if (align == VAlignment.TOP) {
+        rowIndex = i;
+      } else if (align == VAlignment.CENTER) {
+        int topPadding = (height() - blockHeight) / 2;
+        rowIndex = i - topPadding;
+      } else { 
+        int bottomPadding = height() - blockHeight;
+        rowIndex = i - bottomPadding;
+      }
+      if (rowIndex >= 0 && rowIndex < blockHeight) {
+        composedRow += block.row(rowIndex);
+      } else {
+        composedRow += " ".repeat(block.width());
+      }
+    }
+    return composedRow;
   } // row(int)
 
   /**
@@ -80,7 +102,11 @@ public class HComp implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return 0;   // STUB
+    int maxHeight = 0;
+    for (AsciiBlock block : blocks) {
+      maxHeight = Math.max(maxHeight, block.height());
+    }
+    return maxHeight;
   } // height()
 
   /**
@@ -89,7 +115,11 @@ public class HComp implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return 0;   // STUB
+    int totalWidth = 0;
+    for (AsciiBlock block : blocks) {
+      totalWidth += block.width();
+    }
+    return totalWidth;
   } // width()
 
   /**
@@ -102,6 +132,24 @@ public class HComp implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (other instanceof HComp) {
+      return this.eqv((HComp) other);
+    }
+    return false;
   } // eqv(AsciiBlock)
+
+  public boolean eqv(HComp other) {
+    if (this.align != other.align) {
+      return false;
+    }
+    if (this.blocks.length != other.blocks.length) {
+      return false;
+    }
+    for (int i = 0; i < this.blocks.length; i++) {
+      if (!this.blocks[i].eqv(other.blocks[i])) {
+        return false;
+      }
+    }
+    return true;
+  } // eqv(XComp)
 } // class HComp

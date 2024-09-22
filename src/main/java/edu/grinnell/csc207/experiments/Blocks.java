@@ -1,16 +1,17 @@
 package edu.grinnell.csc207.experiments;
 
+import java.io.PrintWriter;
 import edu.grinnell.csc207.blocks.AsciiBlock;
 import edu.grinnell.csc207.blocks.Boxed;
+import edu.grinnell.csc207.blocks.Grid;
 import edu.grinnell.csc207.blocks.HAlignment;
 import edu.grinnell.csc207.blocks.HComp;
 import edu.grinnell.csc207.blocks.Line;
 import edu.grinnell.csc207.blocks.Lines;
 import edu.grinnell.csc207.blocks.Rect;
-import edu.grinnell.csc207.blocks.VComp;
+import edu.grinnell.csc207.blocks.Surrounded;
 import edu.grinnell.csc207.blocks.VAlignment;
-
-import java.io.PrintWriter;
+import edu.grinnell.csc207.blocks.VComp;
 
 /**
  * Experiments with ASCII blocks.
@@ -144,6 +145,23 @@ public class Blocks {
         new VComp(HAlignment.CENTER, new AsciiBlock[] {v1, v7, v11, v19}));
     figure(pen, "Left composition",
         new VComp(HAlignment.RIGHT, new AsciiBlock[] {v1, v7, v11, v19}));
+      
+    separator(pen);
+    AsciiBlock.print(pen, new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'));
+    separator(pen);
+    AsciiBlock.print(pen, new Grid(new Line("Hello"), 3, 4));
+
+    separator(pen);
+
+    AsciiBlock one = new Grid(new Line("A"), 5, 2); // 5x2 grid of 'A'
+    AsciiBlock two = new Grid(new Line("B"), 3, 3); // 3x3 grid of 'B'
+    AsciiBlock three = new Grid(new Line("C"), 2, 6); // 2x6 grid of 'C'
+    
+    AsciiBlock.print(pen, new HComp(VAlignment.TOP, new AsciiBlock[] {one, two, three}));
+    separator(pen);
+    AsciiBlock.print(pen, new HComp(VAlignment.CENTER, new AsciiBlock[] {one, two, three}));
+    separator(pen);
+    AsciiBlock.print(pen, new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three}));
 
     pen.close();
   } // main(String[])

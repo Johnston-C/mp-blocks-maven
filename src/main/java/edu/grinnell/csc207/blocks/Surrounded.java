@@ -4,7 +4,8 @@ package edu.grinnell.csc207.blocks;
  * A text block surrounded by a single letter.
  *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Nicky Moreno Gonzalez
+ * @author Cade J
  */
 public class Surrounded implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -54,7 +55,16 @@ public class Surrounded implements AsciiBlock {
    *   If the row is invalid.
    */
   public String row(int i) throws Exception {
-    throw new Exception("Not yet implemented"); // STUB
+    if (i < 0 || i >= height()) {
+      throw new Exception("Invalid row number");
+    }
+  // Top and bottom row
+    if (i == 0 || i == height() - 1) {
+      return surroundChar.repeat(width());
+    }
+  // Middle rows: surroundChar on both sides, with contents in the middle
+    String contentRow = contents.row(i - 1); // Get the row from the contents
+    return surroundChar + contentRow + surroundChar;
   } // row(int)
 
   /**
@@ -63,7 +73,7 @@ public class Surrounded implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return 0;   // STUB
+    return contents.height() + 2;   // STUB
   } // height()
 
   /**
@@ -72,7 +82,7 @@ public class Surrounded implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return 0;   // STUB
+    return contents.width() + 2;  // STUB
   } // width()
 
   /**
@@ -85,6 +95,28 @@ public class Surrounded implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+      // Check if 'other' is the same type of block (Surrounded)
+      if (other instanceof Surrounded) {
+          return this.eqv((Surrounded) other);
+      }
+      return false; // Different types of blocks are not equivalent
   } // eqv(AsciiBlock)
+
+  /**
+   * Compares this Surrounded block to another Surrounded block
+   * to determine if they are structurally equivalent.
+   *
+   * @param other the Surrounded block to compare to this block.
+   * @return true if the two blocks have the same surrounding character
+   *         and their contents are structurally equivalent; 
+   *         false otherwise.
+   */
+  public boolean eqv(Surrounded other) {
+      // Compare the surrounding character
+      if (!this.surroundChar.equals(other.surroundChar)) {
+          return false;
+      }
+      // Compare the contents (the inner block)
+      return this.contents.eqv(other.contents);
+  } // eqv(Surrounded)
 } // class Surrounded

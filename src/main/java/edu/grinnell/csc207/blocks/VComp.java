@@ -72,7 +72,28 @@ public class VComp implements AsciiBlock {
    *   if i is outside the range of valid rows.
    */
   public String row(int i) throws Exception {
-    return "";  // STUB
+    if((i >= 0) && (i < this.height())){
+      String output ="";
+      int smallerHalfCt = (this.width() - output.length()) / 2;
+      int largerHalfCt = (this.width() - output.length() + 1) / 2;
+      for (int block = 0; block < this.blocks.length; block++) {
+        if (this.blocks[block].height() > i) {
+          output = this.blocks[block].row(i);
+          block = this.blocks.length;
+        } else {
+          i -= this.blocks[block].height();
+        } // if / else
+      } // for [block]
+      if (this.align.equals(HAlignment.LEFT)) {
+        return output + new String(new char[] {' '}).repeat(smallerHalfCt + largerHalfCt);
+      } else if (this.align.equals(HAlignment.CENTER)) {
+        return new String(new char[] {' '}).repeat(smallerHalfCt) + output + new String(new char[] {' '}).repeat(largerHalfCt);
+      } else {
+        return new String(new char[] {' '}).repeat(smallerHalfCt + largerHalfCt) + output;
+      } // if / else if / else
+    } else {
+      throw new Exception("Invalid row " + i);
+    } // if / else
   } // row(int)
 
   /**
@@ -81,7 +102,11 @@ public class VComp implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return 0;   // STUB
+    int h = 0;
+    for(AsciiBlock block : this.blocks){
+      h += block.height();
+    }
+    return h;
   } // height()
 
   /**
@@ -90,7 +115,11 @@ public class VComp implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return 0;   // STUB
+    int w = 0;
+    for(AsciiBlock block : this.blocks){
+      w = Math.max(w,block.width());
+    }
+    return w;
   } // width()
 
   /**

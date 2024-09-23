@@ -138,6 +138,14 @@ public class HComp implements AsciiBlock {
     return false;
   } // eqv(AsciiBlock)
 
+  /**
+   * Compares this HComp block to another HComp block
+   * to determine if they are structurally equivalent.
+
+  * @param other the HComp block to compare to this block.
+  * @return true if the two HComp blocks are structurally equivalent,
+  *         false otherwise.
+  */
   public boolean eqv(HComp other) {
     if (this.align != other.align) {
       return false;

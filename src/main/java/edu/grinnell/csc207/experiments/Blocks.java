@@ -6,6 +6,7 @@ import edu.grinnell.csc207.blocks.Boxed;
 import edu.grinnell.csc207.blocks.Grid;
 import edu.grinnell.csc207.blocks.HAlignment;
 import edu.grinnell.csc207.blocks.HComp;
+import edu.grinnell.csc207.blocks.HFlip;
 import edu.grinnell.csc207.blocks.Line;
 import edu.grinnell.csc207.blocks.Lines;
 import edu.grinnell.csc207.blocks.Rect;
@@ -162,6 +163,9 @@ public class Blocks {
     AsciiBlock.print(pen, new HComp(VAlignment.CENTER, new AsciiBlock[] {one, two, three}));
     separator(pen);
     AsciiBlock.print(pen, new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three}));
+
+    separator(pen);
+    AsciiBlock.print(pen, new HFlip(new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three})));
 
     pen.close();
   } // main(String[])

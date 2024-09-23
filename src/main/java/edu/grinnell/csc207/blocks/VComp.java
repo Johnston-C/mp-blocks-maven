@@ -85,11 +85,11 @@ public class VComp implements AsciiBlock {
         } // if / else
       } // for [block]
       if (this.align.equals(HAlignment.LEFT)) {
-        return output + new String(new char[] {' '}).repeat(smallerHalfCt + largerHalfCt);
+        return output + " ".repeat(smallerHalfCt + largerHalfCt);
       } else if (this.align.equals(HAlignment.CENTER)) {
-        return new String(new char[] {' '}).repeat(smallerHalfCt) + output + new String(new char[] {' '}).repeat(largerHalfCt);
+        return " ".repeat(smallerHalfCt) + output + " ".repeat(largerHalfCt);
       } else {
-        return new String(new char[] {' '}).repeat(smallerHalfCt + largerHalfCt) + output;
+        return " ".repeat(smallerHalfCt + largerHalfCt) + output;
       } // if / else if / else
     } else {
       throw new Exception("Invalid row " + i);

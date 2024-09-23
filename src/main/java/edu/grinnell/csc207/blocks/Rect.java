@@ -20,16 +20,6 @@ public class Rect implements AsciiBlock {
    */
   int height;
 
-  /**
-   * The left block.
-   */
-  AsciiBlock left;
-
-  /**
-   * The right block.
-   */
-  AsciiBlock right;
-
   // +--------------+------------------------------------------------------
   // | Constructors |
   // +--------------+

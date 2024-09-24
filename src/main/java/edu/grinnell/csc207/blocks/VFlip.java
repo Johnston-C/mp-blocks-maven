@@ -80,6 +80,21 @@ public class VFlip implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (other instanceof VFlip) {
+      return this.eqv((VFlip) other); 
+    }
+    return false; 
   } // eqv(AsciiBlock)
+
+  /**
+   * This method checks the structural equivalence of the
+   * underlying blocks by calling their respective eqv methods.
+   * 
+   * @param other the VFlip block to compare to this block.
+   * @return true if the two VFlip blocks are structurally equivalent,
+   *         false otherwise.
+   */
+  public boolean eqv(VFlip other) {
+    return this.block.eqv(other.block);
+  } // eqv (VFlip)
 } // class VFlip

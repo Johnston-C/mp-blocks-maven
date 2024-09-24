@@ -11,6 +11,7 @@ import edu.grinnell.csc207.blocks.Line;
 import edu.grinnell.csc207.blocks.Lines;
 import edu.grinnell.csc207.blocks.Rect;
 import edu.grinnell.csc207.blocks.Surrounded;
+import edu.grinnell.csc207.blocks.Trimmed;
 import edu.grinnell.csc207.blocks.VAlignment;
 import edu.grinnell.csc207.blocks.VComp;
 
@@ -166,6 +167,9 @@ public class Blocks {
 
     separator(pen);
     AsciiBlock.print(pen, new HFlip(new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three})));
+    separator(pen);
+    AsciiBlock.print(pen, new Trimmed(new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'), HAlignment.CENTER, VAlignment.CENTER, 3, 3));
+
 
     pen.close();
   } // main(String[])

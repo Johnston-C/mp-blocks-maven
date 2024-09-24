@@ -86,7 +86,36 @@ public class Padded implements AsciiBlock {
    *   If the row is invalid.
    */
   public String row(int i) throws Exception {
-    throw new Exception("Not yet implemented"); // STUB
+    if((i < 0) || (i >= this.height())) {
+      throw new Exception("Not yet implemented"); // STUB
+    }
+    int smallerPadV = (this.height() - this.block.height()) / 2;
+    int largerPadV = (this.height() - this.block.height() + 1) / 2;
+    int smallerPadH = (this.height() - this.block.height()) / 2;
+    int largerPadH = (this.height() - this.block.height() + 1) / 2;
+    if ((this.valign.equals(VAlignment.TOP)) && (i < smallerPadV + largerPadV)) {
+      return this.pad.repeat(this.width());
+    } else if ((this.valign.equals(VAlignment.CENTER)) && ((i < smallerPadV) || (i > smallerPadV + this.height()))) {
+      return this.pad.repeat(this.width());
+    } else if ((this.valign.equals(VAlignment.BOTTOM)) && (i > this.height())) {
+      return this.pad.repeat(this.width());
+    } else {
+      String output;
+      if (this.valign.equals(VAlignment.TOP)) {
+        output = this.block.row(i);
+      } else if (this.valign.equals(VAlignment.CENTER)) {
+        output = this.block.row(i - smallerPadV);
+      } else {
+        output = this.block.row(i - smallerPadV - largerPadV);
+      }
+      if (this.halign.equals(HAlignment.LEFT)) {
+        return output + this.pad.repeat(smallerPadH + largerPadH);
+      } else if (this.halign.equals(HAlignment.CENTER)) {
+        return this.pad.repeat(smallerPadH) + output + this.pad.repeat(largerPadH);
+      } else {
+        return this.pad.repeat(smallerPadH + largerPadH) + output;
+      } // if / else if / else
+    } // if / else if / else if / else
   } // row(int)
 
   /**
@@ -95,7 +124,7 @@ public class Padded implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return 0;   // STUB
+    return this.height;
   } // height()
 
   /**
@@ -104,7 +133,7 @@ public class Padded implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return 0;   // STUB
+    return this.width;
   } // width()
 
   /**

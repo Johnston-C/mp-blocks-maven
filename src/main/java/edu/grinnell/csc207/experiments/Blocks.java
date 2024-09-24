@@ -173,10 +173,19 @@ public class Blocks {
     separator(pen);
     AsciiBlock.print(pen, new Trimmed(new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'), HAlignment.CENTER, VAlignment.CENTER, 3, 3));    
 
+    // AsciiBlock bg = new Rect(' ', 80, 24);
+
+
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7),' ', 2, 10, new int[]{0, 10, 20}, new int[]{0, 40, 0}));
+    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7), 'n', 2, 10, new int[]{0, 10, 20}, new int[]{0, 40, 0}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7),' ', 2, 10, new int[]{20, 10, 0}, new int[]{0, 40, 0}));
+    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7), 'n', 2, 10, new int[]{20, 10, 0}, new int[]{0, 40, 0}));
+    separator(pen);
+    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 2, 10, new int[]{0, 20, 20}, new int[]{0, 40, 0}));
+    separator(pen);
+    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{20, 20, 0, 0}, new int[]{20, 0, 20, 0}));
+    separator(pen);
+    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     pen.close();
   } // main(String[])
 } // class Blocks

@@ -106,15 +106,15 @@ public class BezierCurveStamp implements AsciiBlock {
 
   private void createData(int[] xData, int[] yData) {
     if((xData.length == yData.length) && (xData.length % this.polyDegree == 1 % this.polyDegree)){
-      int[] refinedXData = new int[(xData.length) / (this.polyDegree+1) * this.subdivisions + 1];
-      int[] refinedYData = new int[(xData.length) / (this.polyDegree+1) * this.subdivisions + 1];
+      int[] refinedXData = new int[(xData.length) / (this.polyDegree + 1) * this.subdivisions + 1];
+      int[] refinedYData = new int[(xData.length) / (this.polyDegree + 1) * this.subdivisions + 1];
       float curX;
       float curY;
       int lastX;
       int lastY;
       float deltaX = 0;
       float deltaY = 0;
-      for(int i = 0; i < (xData.length) / (this.polyDegree+1); i++){
+      for(int i = 0; i < (xData.length) / (this.polyDegree + 1); i++){
         for(double j = 0; j <= this.subdivisions; j++){
           curX = 0;
           curY = 0;
@@ -126,6 +126,7 @@ public class BezierCurveStamp implements AsciiBlock {
           } // for [k]
           refinedXData[(int) (i * this.subdivisions + j)] = Math.round(curX);
           refinedYData[(int) (i * this.subdivisions + j)] = Math.round(curY);
+          System.out.printf("ADDED: [%d, %d]\n", refinedXData[(int) (i * this.subdivisions + j)], refinedYData[(int) (i * this.subdivisions + j)]);
         } // for [j]
       } // for [i]
       for(int i = 0; i < refinedXData.length - 1; i++) {
@@ -140,22 +141,30 @@ public class BezierCurveStamp implements AsciiBlock {
           for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1]; curX += deltaX) {
             if (Math.abs((float) lastY - curY) >= 0.5) {
               lastY+=Math.signum(deltaY);
-              if (Math.abs((float) lastY - curY) > deltaY * 0.5) {
-                includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-              } else if (Math.abs((float) lastY - curY) < deltaY * 0.5) {
-                includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
-              } // if / else if
+              if(Math.abs(Math.abs((float) lastY - curY) - Math.abs(deltaY * 0.5)) > 0.01) {
+                if (Math.abs((float) lastY - curY) > Math.abs(deltaY * 0.5)) {
+                  System.out.print("A |lastY - curY| > |deltaY / 2| therefore ");
+                  includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
+                } else if (Math.abs((float) lastY - curY) < Math.abs(deltaY * 0.5)) {
+                  System.out.print("A |lastY - curY| < |deltaY / 2| therefore ");
+                  includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
+                } // if / else if
+              } // if
             } // if
             includeIfValid((int) curX, lastY);
             curY += deltaY;
           } // for (curX)
           if (Math.abs((float) lastY - curY) >= 0.5) {
             lastY+=Math.signum(deltaY);
-            if (Math.abs((float) lastY - curY) > Math.abs(deltaY * 0.5)) {
-              includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-            } else if (Math.abs((float) lastY - curY) < Math.abs(deltaY * 0.5)) {
-              includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
-            } // if / else if
+            if(Math.abs(Math.abs((float) lastY - curY) - Math.abs(deltaY * 0.5)) > 0.01) {
+              if (Math.abs((float) lastY - curY) > Math.abs(deltaY * 0.5)) {
+                System.out.print("B |lastY - curY| > |deltaY / 2| therefore ");
+                includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
+              } else if (Math.abs((float) lastY - curY) < Math.abs(deltaY * 0.5)) {
+                System.out.print("B |lastY - curY| < |deltaY / 2| therefore ");
+                includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
+              } // if / else if
+            }
           } // if
           includeIfValid((int) curX, lastY);
         } else {
@@ -165,22 +174,28 @@ public class BezierCurveStamp implements AsciiBlock {
           for(curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1]; curY += deltaY) {
             if (Math.abs((float) lastX - curX) >= 0.5) {
               lastX+=Math.signum(deltaX);
-              if (Math.abs((float) lastX - curX) > Math.abs(deltaX * 0.5)) {
-                includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-              } else if (Math.abs((float) lastX - curX) < Math.abs(deltaX * 0.5)) {
-                includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
-              } // if / else if
+              if(Math.abs(Math.abs((float) lastX - curX) - Math.abs(deltaX * 0.5)) > 0.01) {
+                if (Math.abs((float) lastX - curX) > Math.abs(deltaX * 0.5)) {
+                  includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
+                } else if (Math.abs((float) lastX - curX) < Math.abs(deltaX * 0.5)) {
+                  includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
+                } // if / else if
+              } // if
             } // if
             includeIfValid(lastX, (int) curY);
             curX += deltaX;
           } // curY
           if (Math.abs((float) lastX - curX) >= 0.5) {
             lastX+=Math.signum(deltaX);
-            if (Math.abs((float) lastX - curX) > deltaX * 0.5) {
-              includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-            } else if (Math.abs((float) lastX - curX) < deltaX * 0.5) {
-              includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
-            } // if / else if
+            if(Math.abs(Math.abs((float) lastX - curX) - Math.abs(deltaX * 0.5)) > 0.01) {
+              if (Math.abs((float) lastX - curX) > Math.abs(deltaX * 0.5)) {
+                System.out.print("B |lastX - curX| > |deltaX / 2| therefore ");
+                includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
+              } else if (Math.abs((float) lastX - curX) < Math.abs(deltaX * 0.5)) {
+                System.out.print("B |lastX - curX| < |deltaX / 2| therefore ");
+                includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
+              } // if / else if
+            } // if
           } // if
           includeIfValid(lastX, (int) curY);
         } // if / else
@@ -205,7 +220,7 @@ public class BezierCurveStamp implements AsciiBlock {
 
   private void includeIfValid(int xCoord, int yCoord){
     if((xCoord >= 0) && (xCoord < this.width()) && (yCoord >= 0) && (yCoord < this.height())){
-
+      System.out.printf("Added: (%d, %d)\n", xCoord, yCoord);
       stampData[yCoord][xCoord] = true;
     } else {
       if(xCoord < 2 * this.height()) {

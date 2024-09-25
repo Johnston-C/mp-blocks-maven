@@ -3,8 +3,8 @@ package edu.grinnell.csc207.blocks;
 /**
  * A padded ASCII block.
  *
- * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class Padded implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -146,6 +146,6 @@ public class Padded implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    return false;
   } // eqv(AsciiBlock)
 } // class Padded

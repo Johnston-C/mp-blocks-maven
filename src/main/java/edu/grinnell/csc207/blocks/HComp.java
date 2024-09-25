@@ -5,8 +5,8 @@ import java.util.Arrays;
 /**
  * The horizontal composition of blocks.
  *
- * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class HComp implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -73,7 +73,7 @@ public class HComp implements AsciiBlock {
   public String row(int i) throws Exception {
     if (i < 0 || i >= height()) {
       throw new Exception("Invalid row index.");
-    }
+    } // if
     String composedRow = ""; // Start with an empty string
     for (AsciiBlock block : blocks) {
       int blockHeight = block.height();
@@ -83,16 +83,16 @@ public class HComp implements AsciiBlock {
       } else if (align == VAlignment.CENTER) {
         int topPadding = (height() - blockHeight) / 2;
         rowIndex = i - topPadding;
-      } else { 
+      } else {
         int bottomPadding = height() - blockHeight;
         rowIndex = i - bottomPadding;
-      }
+      } // else
       if (rowIndex >= 0 && rowIndex < blockHeight) {
         composedRow += block.row(rowIndex);
       } else {
         composedRow += " ".repeat(block.width());
-      }
-    }
+      } // else
+    } // for
     return composedRow;
   } // row(int)
 
@@ -105,7 +105,7 @@ public class HComp implements AsciiBlock {
     int maxHeight = 0;
     for (AsciiBlock block : blocks) {
       maxHeight = Math.max(maxHeight, block.height());
-    }
+    } // for
     return maxHeight;
   } // height()
 
@@ -118,7 +118,7 @@ public class HComp implements AsciiBlock {
     int totalWidth = 0;
     for (AsciiBlock block : blocks) {
       totalWidth += block.width();
-    }
+    } // for
     return totalWidth;
   } // width()
 
@@ -134,7 +134,7 @@ public class HComp implements AsciiBlock {
   public boolean eqv(AsciiBlock other) {
     if (other instanceof HComp) {
       return this.eqv((HComp) other);
-    }
+    } // if
     return false;
   } // eqv(AsciiBlock)
 
@@ -149,15 +149,15 @@ public class HComp implements AsciiBlock {
   public boolean eqv(HComp other) {
     if (this.align != other.align) {
       return false;
-    }
+    } // if
     if (this.blocks.length != other.blocks.length) {
       return false;
-    }
+    } // if
     for (int i = 0; i < this.blocks.length; i++) {
       if (!this.blocks[i].eqv(other.blocks[i])) {
         return false;
-      }
-    }
+      } // if
+    } // for
     return true;
-  } // eqv(XComp)
+  } // eqv(HComp)
 } // class HComp

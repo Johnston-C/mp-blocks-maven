@@ -3,8 +3,8 @@ package edu.grinnell.csc207.blocks;
 /**
  * A horizontally flipped ASCII block.
  *
- * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class HFlip implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -49,7 +49,7 @@ public class HFlip implements AsciiBlock {
     String reversedRow = "";
     for (int j = originalRow.length() - 1; j >= 0; j--) {
       reversedRow += originalRow.charAt(j);
-    }
+    } // for
     return reversedRow;
   } // row(int)
 
@@ -59,7 +59,7 @@ public class HFlip implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return block.height();   // STUB
+    return block.height();
   } // height()
 
   /**
@@ -68,7 +68,7 @@ public class HFlip implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return block.width();   // STUB
+    return block.width();
   } // width()
 
   /**
@@ -82,11 +82,11 @@ public class HFlip implements AsciiBlock {
    */
   public boolean eqv(AsciiBlock other) {
     if (other instanceof HFlip) {
-      return this.eqv((HFlip) other); 
-    }
-    return false;      
+      return this.eqv((HFlip) other);
+    } // if
+    return false;
   } // eqv(AsciiBlock)
-  
+
   /**
    * Compares this HFlip block to another HFlip block
    * to determine if they are structurally equivalent.
@@ -97,5 +97,5 @@ public class HFlip implements AsciiBlock {
    */
   public boolean eqv(HFlip other) {
     return this.block.eqv(other.block);
-  }
+  } // eqv(HFlip)
 } // class HFlip

@@ -3,8 +3,8 @@ package edu.grinnell.csc207.blocks;
 /**
  * A trimmed ASCII block.
  *
- * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class Trimmed implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -80,28 +80,28 @@ public class Trimmed implements AsciiBlock {
   public String row(int i) throws Exception {
     if (this.width > block.width() || this.height > block.height()) {
       return "Error: Original Block width or height is smaller";
-    }
+    } // if
     int startRow;
     if (valign == VAlignment.TOP) {
-      startRow = i;  
+      startRow = i;
     } else if (valign == VAlignment.CENTER) {
-      startRow = i + (block.height() - this.height) / 2; 
-    } else {  
+      startRow = i + (block.height() - this.height) / 2;
+    } else {
       startRow = i + (block.height() - this.height); // Align the bottom
-    }
+    } // else
     if (startRow < 0 || startRow >= block.height()) {
-        throw new Exception("Invalid row index.");
-    }
+      throw new Exception("Invalid row index.");
+    } // if
 
     String originalRow = block.row(startRow);
     int startCol;
     if (halign == HAlignment.LEFT) {
-      startCol = 0;  
+      startCol = 0;
     } else if (halign == HAlignment.CENTER) {
-      startCol = (block.width() - this.width) / 2; 
-    } else {  
+      startCol = (block.width() - this.width) / 2;
+    } else {
       startCol = block.width() - this.width; // Align the right
-    }
+    } // else
     return originalRow.substring(startCol, startCol + this.width);
   } // row(int)
 
@@ -111,7 +111,7 @@ public class Trimmed implements AsciiBlock {
    * @return the number of rows
    */
   public int height() {
-    return this.height;   // STUB
+    return this.height;
   } // height()
 
   /**
@@ -120,7 +120,7 @@ public class Trimmed implements AsciiBlock {
    * @return the number of columns
    */
   public int width() {
-    return this.width;    // STUB
+    return this.width;
   } // width()
 
   /**
@@ -134,25 +134,21 @@ public class Trimmed implements AsciiBlock {
    */
   public boolean eqv(AsciiBlock other) {
     if (other instanceof Trimmed) {
-      return this.eqv((Trimmed) other); 
-    }
+      return this.eqv((Trimmed) other);
+    } // if
     return false;
   } // eqv(AsciiBlock)
 
 /**
- * This method compares the horizontal and vertical alignment, 
- * the trimmed width and height, and the structural equivalence of 
+ * This method compares the horizontal and vertical alignment,
+ * the trimmed width and height, and the structural equivalence of
  * the underlying blocks.
- * 
+ *
  * @param other the Trimmed block to compare to this block.
  * @return true if the two Trimmed blocks are structurally equivalent,
  *         false otherwise.
  */
   public boolean eqv(Trimmed other) {
-    return this.halign == other.halign &&
-           this.valign == other.valign &&
-           this.width == other.width &&
-           this.height == other.height &&
-           this.block.eqv(other.block);
-  }
+    return false;
+  } // eqv(Trimmed)
 } // class Trimmed

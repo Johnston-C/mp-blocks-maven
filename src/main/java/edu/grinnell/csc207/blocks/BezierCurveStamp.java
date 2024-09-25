@@ -4,7 +4,8 @@ package edu.grinnell.csc207.blocks;
  * A block of Ascii characters with a curve of characture transposed
  * on top of it.
  *
- * @author Samuel A. Rebelsky
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class BezierCurveStamp implements AsciiBlock {
 

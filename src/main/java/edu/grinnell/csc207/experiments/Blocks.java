@@ -20,8 +20,8 @@ import edu.grinnell.csc207.blocks.VComp;
  * Experiments with ASCII blocks.
  *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
- * @author Your Name Here
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class Blocks {
   /**
@@ -148,62 +148,63 @@ public class Blocks {
         new VComp(HAlignment.CENTER, new AsciiBlock[] {v1, v7, v11, v19}));
     figure(pen, "Left composition",
         new VComp(HAlignment.RIGHT, new AsciiBlock[] {v1, v7, v11, v19}));
-      
+
     separator(pen);
     AsciiBlock.print(pen, new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'));
     separator(pen);
     AsciiBlock.print(pen, new Grid(new Line("Hello"), 3, 4));
-
     separator(pen);
-
     AsciiBlock one = new Grid(new Line("A"), 5, 2); // 5x2 grid of 'A'
     AsciiBlock two = new Grid(new Line("B"), 3, 3); // 3x3 grid of 'B'
     AsciiBlock three = new Grid(new Line("C"), 2, 6); // 2x6 grid of 'C'
-    
     AsciiBlock.print(pen, new HComp(VAlignment.TOP, new AsciiBlock[] {one, two, three}));
     separator(pen);
     AsciiBlock.print(pen, new HComp(VAlignment.CENTER, new AsciiBlock[] {one, two, three}));
     separator(pen);
     AsciiBlock.print(pen, new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three}));
-
     separator(pen);
-    AsciiBlock.print(pen, new HFlip(new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three})));
-
-    
+    AsciiBlock.print(pen,
+        new HFlip(new HComp(VAlignment.BOTTOM, new AsciiBlock[] {one, two, three})));
     separator(pen);
-    AsciiBlock.print(pen, new Trimmed(new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'), HAlignment.CENTER, VAlignment.CENTER, 3, 3));    
-
+    AsciiBlock.print(pen,
+        new Trimmed(new Surrounded(new Surrounded(new Line("A"), 'B'), 'C'),
+            HAlignment.CENTER, VAlignment.CENTER, 3, 3));
     // AsciiBlock bg = new Rect(' ', 80, 24);
-
-
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7), 'n', 2, 10, new int[]{0, 10, 20}, new int[]{0, 40, 0}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7),
+            'n', 2, 10, new int[]{0, 10, 20}, new int[]{0, 40, 0}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7), 'n', 2, 10, new int[]{20, 10, 0}, new int[]{0, 40, 0}));
+    AsciiBlock.print(pen,
+      new BezierCurveStamp(new Grid(new Boxed(new Rect(' ', 1, 1)), 7, 7),
+          'n', 2, 10, new int[]{20, 10, 0}, new int[]{0, 40, 0}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 2, 10, new int[]{0, 20, 20}, new int[]{0, 40, 0}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 2, 10, new int[]{0, 20, 20}, new int[]{0, 40, 0}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{20, 20, 0, 0}, new int[]{20, 0, 20, 0}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 3, 10, new int[]{20, 20, 0, 0}, new int[]{20, 0, 20, 0}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 100, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 3, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 3, 100, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 1, 1, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 1, 1, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 1, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 1, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
-    AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{10, 30, -10, 10}, new int[]{0, 0, 20, 20}));
-    separator(pen);
-    AsciiBlock halfCircle = new BezierCurveStamp(new Rect('^', 40, 18), ' ', 3, 40, new int[]{40, -8, -8, 40}, new int[]{0, 0, 16, 16});
-    AsciiBlock stick1 = new Rect('^', 4, 2);
-    AsciiBlock stick2 = new Rect('^', 36, 6);
-    AsciiBlock stick = new HComp(VAlignment.TOP, new AsciiBlock[] {stick2, stick1});
-    AsciiBlock assemble1 = new VComp(HAlignment.LEFT, new AsciiBlock[] {stick, halfCircle});
-    AsciiBlock eyes = new BezierCurveStamp(assemble1, ' ', 3, 40, new int[]{28, 32, 35, 28}, new int[]{10, 5, 16, 10}) ;
-    AsciiBlock smile = new BezierCurveStamp(eyes, ' ', 3, 40, new int[]{40, 18, 23, 40}, new int[]{16, 11, 20, 20}) ;
-    AsciiBlock reversedHalf = new HFlip(smile);
-    AsciiBlock art = new HComp(VAlignment.TOP, new AsciiBlock[] {smile, reversedHalf});
-    AsciiBlock.print(pen, art);
+    AsciiBlock.print(pen,
+        new BezierCurveStamp(new Rect(' ', 21, 21),
+            '*', 3, 10, new int[]{10, 30, -10, 10}, new int[]{0, 0, 20, 20}));
     pen.close();
   } // main(String[])
 } // class Blocks

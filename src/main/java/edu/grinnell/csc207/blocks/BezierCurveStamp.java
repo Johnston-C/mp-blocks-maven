@@ -28,6 +28,16 @@ public class BezierCurveStamp implements AsciiBlock {
   int subdivisions;
 
   /**
+   * The amount of subdivisions in each bezierCurve.
+   */
+  int[] xCoordArray;
+
+  /**
+   * The amount of subdivisions in each bezierCurve.
+   */
+  int[] yCoordArray;
+
+  /**
    * The data of the stamp.
    */
   boolean[][] stampData;
@@ -63,13 +73,15 @@ public class BezierCurveStamp implements AsciiBlock {
     this.c = ch;
     this.polyDegree = degree;
     this.subdivisions = divisions;
+    this.xCoordArray = xCoords;
+    this.yCoordArray = yCoords;
     this.stampData = new boolean[this.height()][this.width()];
     for (int i = 0; i < contents.height(); i++) {
       for (int j = 0; j < contents.width(); j++) {
         stampData[i][j] = false;
       } // for [j]
     } // for [i]
-    createData(xCoords, yCoords);
+    createData();
   } // Boxed(AsciiBlock)
 
   // +---------+-----------------------------------------------------------
@@ -121,47 +133,54 @@ public class BezierCurveStamp implements AsciiBlock {
     return this.contents.width();
   } // width()
 
-  private void createData(int[] xData, int[] yData) {
-    if ((xData.length == yData.length) && (xData.length % this.polyDegree == 1 % this.polyDegree)) {
-      int[] refinedXData = new int[(xData.length - 1) / (this.polyDegree) * this.subdivisions + 1];
-      int[] refinedYData = new int[(xData.length - 1) / (this.polyDegree) * this.subdivisions + 1];
+  /**
+   * Determine which coordinates should be replaced with c.
+   */
+  private void createData() {
+    if ((this.xCoordArray.length == this.yCoordArray.length)
+      && (this.xCoordArray.length % this.polyDegree == 1 % this.polyDegree)) {
+      int[] refinedXCoordArray = new int[(this.xCoordArray.length - 1) / (this.polyDegree)
+                                          * this.subdivisions + 1];
+      int[] refinedYCoordArray = new int[(this.xCoordArray.length - 1) / (this.polyDegree)
+                                          * this.subdivisions + 1];
       float curX;
       float curY;
       int lastX;
       int lastY;
       float deltaX = 0;
       float deltaY = 0;
-      for (int i = 0; i < (xData.length - 1) / (this.polyDegree); i++) {
+      for (int i = 0; i < (this.xCoordArray.length - 1) / (this.polyDegree); i++) {
         for (double j = 0; j <= this.subdivisions; j++) {
           curX = 0;
           curY = 0;
           for (int k = 0; k <= this.polyDegree; k++) {
-            deltaX = xData[i * this.polyDegree + k] * combinations(this.polyDegree, k)
+            deltaX = this.xCoordArray[i * this.polyDegree + k] * combinations(this.polyDegree, k)
                      * (float) (Math.pow(j / this.subdivisions, k)
                      * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
-            deltaY = yData[i * this.polyDegree + k] * combinations(this.polyDegree, k)
+            deltaY = this.yCoordArray[i * this.polyDegree + k] * combinations(this.polyDegree, k)
                      * (float) (Math.pow(j / this.subdivisions, k)
                      * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
             curX += deltaX;
             curY += deltaY;
           } // for [k]
-          refinedXData[(int) (i * this.subdivisions + j)] = Math.round(curX);
-          refinedYData[(int) (i * this.subdivisions + j)] = Math.round(curY);
+          refinedXCoordArray[(int) (i * this.subdivisions + j)] = Math.round(curX);
+          refinedYCoordArray[(int) (i * this.subdivisions + j)] = Math.round(curY);
         } // for [j]
       } // for [i]
-      for (int i = 0; i < refinedXData.length - 1; i++) {
-        curX = refinedXData[i];
-        curY = refinedYData[i];
-        if ((Math.abs(refinedXData[i + 1] - refinedXData[i]) == 0)
-            && (Math.abs(refinedYData[i + 1] - refinedYData[i]) == 0)) {
+      for (int i = 0; i < refinedXCoordArray.length - 1; i++) {
+        curX = refinedXCoordArray[i];
+        curY = refinedYCoordArray[i];
+        if ((Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i]) == 0)
+            && (Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i]) == 0)) {
           includeIfValid((int) curX, (int) curY);
-        } else if (Math.abs(refinedXData[i + 1] - refinedXData[i])
-                   >= Math.abs(refinedYData[i + 1] - refinedYData[i])) {
-          deltaX = Math.signum(refinedXData[i + 1] - refinedXData[i]);
-          deltaY = (float) (refinedYData[i + 1] - refinedYData[i])
-                   / Math.abs(refinedXData[i + 1] - refinedXData[i]);
+        } else if (Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i])
+                   >= Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i])) {
+          deltaX = Math.signum(refinedXCoordArray[i + 1] - refinedXCoordArray[i]);
+          deltaY = (float) (refinedYCoordArray[i + 1] - refinedYCoordArray[i])
+                   / Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i]);
           lastY = (int) curY;
-          for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1]; curX += deltaX) {
+          for (curX = refinedXCoordArray[i]; (int) curX != (int) refinedXCoordArray[i + 1];
+               curX += deltaX) {
             if (Math.abs((float) lastY - curY) >= 0.5) {
               lastY += Math.signum(deltaY);
               if (Math.abs(lastY - curY - Math.signum(deltaY)) - 0.5 < Math.abs(deltaY)) {
@@ -183,11 +202,12 @@ public class BezierCurveStamp implements AsciiBlock {
           } // if
           includeIfValid((int) curX, lastY);
         } else {
-          deltaY = Math.signum(refinedYData[i + 1] - refinedYData[i]);
-          deltaX = (float) (refinedXData[i + 1] - refinedXData[i])
-                   / Math.abs(refinedYData[i + 1] - refinedYData[i]);
+          deltaY = Math.signum(refinedYCoordArray[i + 1] - refinedYCoordArray[i]);
+          deltaX = (float) (refinedXCoordArray[i + 1] - refinedXCoordArray[i])
+                   / Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i]);
           lastX = (int) curX;
-          for (curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1]; curY += deltaY) {
+          for (curY = refinedYCoordArray[i]; (int) curY != (int) refinedYCoordArray[i + 1];
+               curY += deltaY) {
             if (Math.abs((float) lastX - curX) >= 0.5) {
               lastX += Math.signum(deltaX);
               if (Math.abs(lastX - curX - Math.signum(deltaX)) - 0.5 < Math.abs(deltaX)) {

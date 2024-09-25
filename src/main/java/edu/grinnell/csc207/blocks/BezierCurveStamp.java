@@ -191,11 +191,11 @@ public class BezierCurveStamp implements AsciiBlock {
                !curX.equal(new Fraction(refinedXCoordArray[i + 1]));
                curX = curX.add(deltaX)) {
             if (lastY.subtract(curY).abs().greaterEq(new Fraction(1, 2))) {
-              if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+              if (lastY.subtract(curY).subtract(deltaY.divide(new Fraction(1, 2))).abs()
                   .greater(new Fraction(1, 2))) {
                 lastY = lastY.add(deltaY.sign());
                 includeIfValid(curX.numerator(),  lastY.subtract(deltaY.sign()).numerator());
-              } else if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+              } else if (lastY.subtract(curY).subtract(deltaY.divide(new Fraction(1, 2))).abs()
                   .less(new Fraction(1, 2))) {
                 lastY = lastY.add(deltaY.sign());
                 includeIfValid(curX.subtract(deltaX.sign()).numerator(),  lastY.numerator());
@@ -205,11 +205,11 @@ public class BezierCurveStamp implements AsciiBlock {
             curY = curY.add(deltaY);
           } // for (curX)
           if (lastY.subtract(curY).abs().greaterEq(new Fraction(1, 2))) {
-            if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+            if (lastY.subtract(curY).subtract(deltaY.divide(new Fraction(1, 2))).abs()
                 .greater(new Fraction(1, 2))) {
               lastY = lastY.add(deltaY.sign());
               includeIfValid(curX.numerator(),  lastY.subtract(deltaY.sign()).numerator());
-            } else if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+            } else if (lastY.subtract(curY).subtract(deltaY.divide(new Fraction(1, 2))).abs()
                 .less(new Fraction(1, 2))) {
               lastY = lastY.add(deltaY.sign());
               includeIfValid(curX.subtract(deltaX.sign()).numerator(),  lastY.numerator());
@@ -225,11 +225,11 @@ public class BezierCurveStamp implements AsciiBlock {
                !curY.equal(new Fraction(refinedYCoordArray[i + 1]));
                curY = curY.add(deltaY)) {
             if (lastX.subtract(curX).abs().greaterEq(new Fraction(1, 2))) {
-              if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+              if (lastX.subtract(curX).subtract(deltaX.divide(new Fraction(1, 2))).abs()
                   .greater(new Fraction(1, 2))) {
                 lastX = lastX.add(deltaX.sign());
                 includeIfValid(lastX.numerator(), curY.subtract(deltaY.sign()).numerator());
-              } else if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+              } else if (lastX.subtract(curX).subtract(deltaX.divide(new Fraction(1, 2))).abs()
                   .less(new Fraction(1, 2))) {
                 lastX = lastX.add(deltaX.sign());
                 includeIfValid(lastX.subtract(deltaX.sign()).numerator(), curY.numerator());
@@ -239,11 +239,11 @@ public class BezierCurveStamp implements AsciiBlock {
             curX = curX.add(deltaX);
           } // curY
           if (lastX.subtract(curX).abs().greaterEq(new Fraction(1, 2))) {
-            if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+            if (lastX.subtract(curX).subtract(deltaX.divide(new Fraction(1, 2))).abs()
                 .greater(new Fraction(1, 2))) {
               lastX = lastX.add(deltaX.sign());
               includeIfValid(lastX.numerator(), curY.subtract(deltaY.sign()).numerator());
-            } else if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+            } else if (lastX.subtract(curX).subtract(deltaX.divide(new Fraction(1, 2))).abs()
                 .less(new Fraction(1, 2))) {
               lastX = lastX.add(deltaX.sign());
               includeIfValid(lastX.subtract(deltaX.sign()).numerator(), curY.numerator());

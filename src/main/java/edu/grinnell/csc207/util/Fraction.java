@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.util;
 
+import java.math.BigInteger;
 /**
  * A simple implementation of arbitrary-precision Fractions.
  *
@@ -8,23 +9,23 @@ package edu.grinnell.csc207.util;
 public class Fraction {
 
   /** The zero fraction */
-  public static final Fraction ZERO = new Fraction(0);
+  public static final Fraction ZERO = new Fraction("0");
 
   /** The one fraction */
-  public static final Fraction ONE = new Fraction(1);
+  public static final Fraction ONE = new Fraction("1");
 
   /** The negative one fraction */
-  public static final Fraction NEGONE = new Fraction(-1);
+  public static final Fraction NEGONE = new Fraction("-1");
 
   // +--------+
   // | Fields |
   // +--------+
 
   /** The numerator. Can be any integer. */
-  private int num;
+  private BigInteger num;
 
   /** The denominator. Must be non-negative. */
-  private int denom;
+  private BigInteger denom;
 
   // +--------------+
   // | Constructors |
@@ -33,25 +34,51 @@ public class Fraction {
   /**
    * Build a new fraction with numerator num and denominator denom.
    *
+   * @param n The numerator of the fraction [BigInteger].
+   * @param d The denominator of the fraction [BigInteger].
+   */
+  public Fraction(BigInteger n, BigInteger d) {
+    BigInteger gcd = n.gcd(d);
+    this.num = n.divide(gcd);
+    this.denom = d.divide(gcd);
+    if (this.num.multiply(this.denom).abs().equals(this.num.multiply(this.denom))) {
+      this.num = this.num.abs();
+    } else {
+      this.num = this.num.abs().negate();
+    } // if / else
+    this.denom = this.denom.abs();
+  } // Fraction(BigInteger, BigInteger)
+
+  /**
+   * Build a new fraction with numerator num and denominator denom.
+   *
    * @param n The numerator of the fraction [int].
    * @param d The denominator of the fraction [int].
    */
   public Fraction(int n, int d) {
-    int gcd = gcd(n, d);
-    this.num = n / gcd;
-    this.denom = d / gcd;
-    if (Math.abs(this.num * this.denom) == (this.num * this.denom)) {
-      this.num = Math.abs(this.num);
+    BigInteger bINum = BigInteger.valueOf(n);
+    BigInteger bIDenom = BigInteger.valueOf(d);
+    BigInteger gcd = bINum.gcd(bIDenom);
+    this.num = bINum.divide(gcd);
+    this.denom = bIDenom.divide(gcd);
+    if (this.num.multiply(this.denom).abs().equals(this.num.multiply(this.denom))) {
+      this.num = this.num.abs();
     } else {
-      this.num = - Math.abs(this.num);
+      this.num = this.num.abs().negate();
     } // if / else
-    this.denom = Math.abs(this.denom);
-  } // BigFraction(int, int)
+    this.denom = this.denom.abs();
+  } // Fraction(int, int)
 
+  /**
+   * Build a new fraction with numerator num and denominator denom.
+   *
+   * @param n The numerator of the fraction [int].
+   * @param d The denominator of the fraction [int].
+   */
   public Fraction(int n) {
-    this.num = n;
-    this.denom = 1;
-  } // BigFraction(int)
+    this.num = new BigInteger(n+"");
+    this.denom = BigInteger.ONE;
+  } // Fraction(int, int)
 
   /**
    * Build a new fraction based on the input string.
@@ -61,20 +88,20 @@ public class Fraction {
   public Fraction(String fracString) {
     int split = fracString.indexOf("/");
     if (split == -1) {
-      this.num = Integer.parseInt(fracString);
-      this.denom = 1;
+      this.num = new BigInteger(fracString);
+      this.denom = BigInteger.ONE;
     } else {
-      this.num = Integer.parseInt(fracString.substring(0, split));
-      this.denom = Integer.parseInt(fracString.substring(split + 1));
-      int gcd = gcd(Math.abs(this.num), Math.abs(this.denom));
-      if (Math.abs(this.num * this.denom) == (this.num * this.denom)) {
-        this.num = Math.abs(this.num) / gcd;
+      this.num = new BigInteger(fracString.substring(0, split));
+      this.denom = new BigInteger(fracString.substring(split + 1));
+      BigInteger gcd = this.num.gcd(this.denom);
+      if (this.num.multiply(this.denom).abs().equals(this.num.multiply(this.denom))) {
+        this.num = this.num.abs().divide(gcd);
       } else {
-        this.num = - Math.abs(this.num) / gcd;
+        this.num = this.num.abs().negate().divide(gcd);
       } // if / else
-      this.denom = Math.abs(this.denom) / gcd;
+      this.denom = this.denom.abs().divide(gcd);
     } // if / else
-  } // BigFraction(String)
+  } // Fraction(String)
 
   // +---------+
   // | Methods |
@@ -88,10 +115,18 @@ public class Fraction {
    *
    * @return the result of the addition.
    */
+  /**
+   * Add another faction to this fraction.
+   *
+   * @param addend
+   *   The fraction to add.
+   *
+   * @return the result of the addition.
+   */
   public Fraction add(Fraction addend) {
-    return new Fraction(this.num * addend.denom + addend.num * this.denom,
-        this.denom * addend.denom);
-  } // add(BigFraction)
+    return new Fraction(this.num.multiply(addend.denom).add(addend.num.multiply(this.denom)),
+        this.denom.multiply(addend.denom));
+  } // add(Fraction)
 
   /**
    * Subtract another faction from the current value and store the result.
@@ -103,9 +138,9 @@ public class Fraction {
    */
   public Fraction subtract(Fraction subtrahend) {
     return new Fraction(
-        this.num * subtrahend.denom - subtrahend.num * this.denom,
-        this.denom * subtrahend.denom);
-  } // Subtract(BigFraction)
+        this.num.multiply(subtrahend.denom).subtract(subtrahend.num.multiply(this.denom)),
+        this.denom.multiply(subtrahend.denom));
+  } // Subtract(Fraction)
 
   /**
    * Multiply another faction to the current value and store the result.
@@ -116,9 +151,9 @@ public class Fraction {
    * @return the result of the multiplication.
    */
   public Fraction multiply(Fraction multiplier) {
-    return new Fraction(this.num * multiplier.num,
-        this.denom * multiplier.denom);
-  } // multiply(BigFraction)
+    return new Fraction(this.num.multiply(multiplier.num),
+        this.denom.multiply(multiplier.denom));
+  } // multiply(Fraction)
 
   /**
    * Divide another faction from the current value abnd store the result.
@@ -129,8 +164,8 @@ public class Fraction {
    * @return the result of the division.
    */
   public Fraction divide(Fraction divisor) {
-    return new Fraction(this.num * divisor.denom, this.denom * divisor.num);
-  } // divide(BigFraction)
+    return new Fraction(this.num.multiply(divisor.denom), this.denom.multiply(divisor.num));
+  } // divide(Fraction)
 
   /**
    * Raise the power of this fraction to 'pow'.
@@ -236,7 +271,7 @@ public class Fraction {
    * @return the nearest integer.
    */
   public int round() {
-    return (int) Math.round(((float) this.num / (float) this.denom));
+    return (int) Math.round((this.num.doubleValue() / this.denom.doubleValue()));
   } // round()
 
   /**
@@ -245,7 +280,7 @@ public class Fraction {
    * @return the absolute value.
    */
   public Fraction abs() {
-    return new Fraction(Math.abs(this.num), this.denom);
+    return new Fraction(this.num.abs(), this.denom);
   } // abs()
 
   /**
@@ -258,7 +293,7 @@ public class Fraction {
    * @return
    *   The greatest common denominator of the two numbers.
    */
-  private int gcd(int a, int b) {
+  public int gcd(int a, int b) {
     if(b == 0) {
       return a;
     } else {
@@ -275,9 +310,9 @@ public class Fraction {
    * @return the sign of the fraction.
    */
   public int signInt() {
-    if (this.num == 0) {
+    if (this.num.equals(BigInteger.ZERO)) {
       return 0;
-    } else if (this.num > 0) {
+    } else if (this.num.compareTo(this.denom) > 0) {
       return 1;
     } else {
       return -1;
@@ -290,9 +325,9 @@ public class Fraction {
    * @return the sign of the fraction.
    */
   public Fraction sign() {
-    if (this.num == 0) {
+    if (this.num.equals(BigInteger.ZERO)) {
       return Fraction.ZERO;
-    } else if (this.num > 0) {
+    } else if (this.num.compareTo(this.denom) > 0) {
       return Fraction.ONE;
     } else {
       return Fraction.NEGONE;
@@ -305,7 +340,7 @@ public class Fraction {
    * @return the value of 'num'.
    */
   public int numerator() {
-    return this.num;
+    return this.num.intValue();
   } // numerator()
 
   /**
@@ -314,7 +349,7 @@ public class Fraction {
    * @return the value of 'denom'.
    */
   public int denominator() {
-    return this.denom;
+    return this.denom.intValue();
   } // denominator()
 
   /**
@@ -323,7 +358,7 @@ public class Fraction {
    * @return The String equivalent of the BigFraction's fraction.
    */
   public String toString() {
-    if (this.denom == 1) {
+    if (this.denominator() == 1) {
       return this.num + "";
     } // if
     return this.num + "/" + this.denom;

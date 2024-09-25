@@ -2,6 +2,7 @@ package edu.grinnell.csc207.experiments;
 
 import java.io.PrintWriter;
 import edu.grinnell.csc207.blocks.AsciiBlock;
+import edu.grinnell.csc207.blocks.BezierCurveStamp;
 import edu.grinnell.csc207.blocks.Boxed;
 import edu.grinnell.csc207.blocks.Grid;
 import edu.grinnell.csc207.blocks.HAlignment;
@@ -14,7 +15,6 @@ import edu.grinnell.csc207.blocks.Surrounded;
 import edu.grinnell.csc207.blocks.Trimmed;
 import edu.grinnell.csc207.blocks.VAlignment;
 import edu.grinnell.csc207.blocks.VComp;
-import edu.grinnell.csc207.blocks.BezierCurveStamp;
 
 /**
  * Experiments with ASCII blocks.
@@ -193,6 +193,17 @@ public class Blocks {
     AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 1, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
     AsciiBlock.print(pen, new BezierCurveStamp(new Rect(' ', 21, 21), '*', 3, 10, new int[]{10, 30, -10, 10}, new int[]{0, 0, 20, 20}));
+    separator(pen);
+    AsciiBlock halfCircle = new BezierCurveStamp(new Rect('^', 40, 18), ' ', 3, 40, new int[]{40, -8, -8, 40}, new int[]{0, 0, 16, 16});
+    AsciiBlock stick1 = new Rect('^', 4, 2);
+    AsciiBlock stick2 = new Rect('^', 36, 6);
+    AsciiBlock stick = new HComp(VAlignment.TOP, new AsciiBlock[] {stick2, stick1});
+    AsciiBlock assemble1 = new VComp(HAlignment.LEFT, new AsciiBlock[] {stick, halfCircle});
+    AsciiBlock eyes = new BezierCurveStamp(assemble1, ' ', 3, 40, new int[]{28, 32, 35, 28}, new int[]{10, 5, 16, 10}) ;
+    AsciiBlock smile = new BezierCurveStamp(eyes, ' ', 3, 40, new int[]{40, 18, 23, 40}, new int[]{16, 11, 20, 20}) ;
+    AsciiBlock reversedHalf = new HFlip(smile);
+    AsciiBlock art = new HComp(VAlignment.TOP, new AsciiBlock[] {smile, reversedHalf});
+    AsciiBlock.print(pen, art);
     pen.close();
   } // main(String[])
 } // class Blocks

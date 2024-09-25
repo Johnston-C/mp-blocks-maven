@@ -1,5 +1,7 @@
 package edu.grinnell.csc207.blocks;
 
+import edu.grinnell.csc207.util.Fraction;
+
 /**
  * A block of Ascii characters with a curve of characture transposed
  * on top of it.
@@ -139,96 +141,115 @@ public class BezierCurveStamp implements AsciiBlock {
    */
   private void createData() {
     if ((this.xCoordArray.length == this.yCoordArray.length)
-      && (this.xCoordArray.length % this.polyDegree == 1 % this.polyDegree)) {
+        && (this.xCoordArray.length % this.polyDegree == 1 % this.polyDegree)) {
       int[] refinedXCoordArray = new int[(this.xCoordArray.length - 1) / (this.polyDegree)
                                           * this.subdivisions + 1];
       int[] refinedYCoordArray = new int[(this.xCoordArray.length - 1) / (this.polyDegree)
                                           * this.subdivisions + 1];
-      float curX;
-      float curY;
-      int lastX;
-      int lastY;
-      float deltaX = 0;
-      float deltaY = 0;
+      Fraction curX;
+      Fraction curY;
+      Fraction lastX;
+      Fraction lastY;
+      Fraction deltaX = Fraction.ZERO;
+      Fraction deltaY = Fraction.ZERO;
       for (int i = 0; i < (this.xCoordArray.length - 1) / (this.polyDegree); i++) {
-        for (double j = 0; j <= this.subdivisions; j++) {
-          curX = 0;
-          curY = 0;
+        for (int j = 0; j <= this.subdivisions; j++) {
+          curX = Fraction.ZERO;
+          curY = Fraction.ZERO;
           for (int k = 0; k <= this.polyDegree; k++) {
-            deltaX = this.xCoordArray[i * this.polyDegree + k] * combinations(this.polyDegree, k)
-                     * (float) (Math.pow(j / this.subdivisions, k)
-                     * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
-            deltaY = this.yCoordArray[i * this.polyDegree + k] * combinations(this.polyDegree, k)
-                     * (float) (Math.pow(j / this.subdivisions, k)
-                     * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
-            curX += deltaX;
-            curY += deltaY;
+            deltaX = new Fraction(this.xCoordArray[i * this.polyDegree + k])
+            .multiply(combinations(this.polyDegree, k))
+            .multiply(new Fraction(j, this.subdivisions).pow(k))
+            .multiply(Fraction.ONE.subtract(new Fraction(j, this.subdivisions))
+            .pow(this.polyDegree - k));
+            deltaY = new Fraction(this.yCoordArray[i * this.polyDegree + k])
+            .multiply(combinations(this.polyDegree, k))
+            .multiply(new Fraction(j, this.subdivisions).pow(k))
+            .multiply(Fraction.ONE.subtract(new Fraction(j, this.subdivisions))
+            .pow(this.polyDegree - k));
+            curX = curX.add(deltaX);
+            curY = curY.add(deltaY);
           } // for [k]
-          refinedXCoordArray[(int) (i * this.subdivisions + j)] = Math.round(curX);
-          refinedYCoordArray[(int) (i * this.subdivisions + j)] = Math.round(curY);
+          refinedXCoordArray[(int) (i * this.subdivisions + j)] = curX.round();
+          refinedYCoordArray[(int) (i * this.subdivisions + j)] = curY.round();
         } // for [j]
       } // for [i]
       for (int i = 0; i < refinedXCoordArray.length - 1; i++) {
-        curX = refinedXCoordArray[i];
-        curY = refinedYCoordArray[i];
+
+        curX = new Fraction(refinedXCoordArray[i]);
+        curY = new Fraction(refinedYCoordArray[i]);
         if ((Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i]) == 0)
             && (Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i]) == 0)) {
-          includeIfValid((int) curX, (int) curY);
+          includeIfValid(refinedXCoordArray[i], refinedYCoordArray[i]);
         } else if (Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i])
                    >= Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i])) {
-          deltaX = Math.signum(refinedXCoordArray[i + 1] - refinedXCoordArray[i]);
-          deltaY = (float) (refinedYCoordArray[i + 1] - refinedYCoordArray[i])
-                   / Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i]);
-          lastY = (int) curY;
-          for (curX = refinedXCoordArray[i]; (int) curX != (int) refinedXCoordArray[i + 1];
-               curX += deltaX) {
-            if (Math.abs((float) lastY - curY) >= 0.5) {
-              lastY += Math.signum(deltaY);
-              if (Math.abs(lastY - curY - Math.signum(deltaY)) - 0.5 < Math.abs(deltaY)) {
-                includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-              } else if (Math.abs(lastY - curY - Math.signum(deltaY)) - 0.5 > Math.abs(deltaY)) {
-                includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
+          deltaX = new Fraction(refinedXCoordArray[i + 1] - refinedXCoordArray[i]).sign();
+          deltaY = new Fraction(refinedYCoordArray[i + 1] - refinedYCoordArray[i],
+                   Math.abs(refinedXCoordArray[i + 1] - refinedXCoordArray[i]));
+          lastY = curY;
+          for (curX = new Fraction(refinedXCoordArray[i]);
+               !curX.equal(new Fraction(refinedXCoordArray[i + 1]));
+               curX = curX.add(deltaX)) {
+            if (lastY.subtract(curY).abs().greaterEq(new Fraction(1, 2))) {
+              if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+                  .greater(new Fraction(1, 2))) {
+                lastY = lastY.add(deltaY.sign());
+                includeIfValid(curX.numerator(),  lastY.subtract(deltaY.sign()).numerator());
+              } else if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+                  .less(new Fraction(1, 2))) {
+                lastY = lastY.add(deltaY.sign());
+                includeIfValid(curX.subtract(deltaX.sign()).numerator(),  lastY.numerator());
               } // if / else if
             } // if
-            includeIfValid((int) curX, lastY);
-            curY += deltaY;
+            includeIfValid(curX.numerator(), lastY.numerator());
+            curY = curY.add(deltaY);
           } // for (curX)
-          if (Math.abs((float) lastY - curY) >= 0.5) {
-            lastY += Math.signum(deltaY);
-            if (Math.abs(lastY - curY - Math.signum(deltaX)) - 0.5 < Math.abs(deltaY)) {
-              includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-            } else if (Math.abs(lastY - curY - Math.signum(deltaX)) - 0.5 > Math.abs(deltaY)) {
-              includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
+          if (lastY.subtract(curY).abs().greaterEq(new Fraction(1, 2))) {
+            if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+                .greater(new Fraction(1, 2))) {
+              lastY = lastY.add(deltaY.sign());
+              includeIfValid(curX.numerator(),  lastY.subtract(deltaY.sign()).numerator());
+            } else if (lastY.subtract(curY).add(deltaY.divide(new Fraction(1, 2))).abs()
+                .less(new Fraction(1, 2))) {
+              lastY = lastY.add(deltaY.sign());
+              includeIfValid(curX.subtract(deltaX.sign()).numerator(),  lastY.numerator());
             } // if / else if
           } // if
-          includeIfValid((int) curX, lastY);
+          includeIfValid(curX.numerator(), lastY.numerator());
         } else {
-          deltaY = Math.signum(refinedYCoordArray[i + 1] - refinedYCoordArray[i]);
-          deltaX = (float) (refinedXCoordArray[i + 1] - refinedXCoordArray[i])
-                   / Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i]);
-          lastX = (int) curX;
-          for (curY = refinedYCoordArray[i]; (int) curY != (int) refinedYCoordArray[i + 1];
-               curY += deltaY) {
-            if (Math.abs((float) lastX - curX) >= 0.5) {
-              lastX += Math.signum(deltaX);
-              if (Math.abs(lastX - curX - Math.signum(deltaX)) - 0.5 < Math.abs(deltaX)) {
-                includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-              } else if (Math.abs(lastX - curX - Math.signum(deltaX)) - 0.5 > Math.abs(deltaX)) {
-                includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
+          deltaY = new Fraction(refinedYCoordArray[i + 1] - refinedYCoordArray[i]).sign();
+          deltaX = new Fraction(refinedXCoordArray[i + 1] - refinedXCoordArray[i],
+                   Math.abs(refinedYCoordArray[i + 1] - refinedYCoordArray[i]));
+          lastX = curX;
+          for (curY = new Fraction(refinedYCoordArray[i]);
+               !curY.equal(new Fraction(refinedYCoordArray[i + 1]));
+               curY = curY.add(deltaY)) {
+            if (lastX.subtract(curX).abs().greaterEq(new Fraction(1, 2))) {
+              if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+                  .greater(new Fraction(1, 2))) {
+                lastX = lastX.add(deltaX.sign());
+                includeIfValid(lastX.numerator(), curY.subtract(deltaY.sign()).numerator());
+              } else if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+                  .less(new Fraction(1, 2))) {
+                lastX = lastX.add(deltaX.sign());
+                includeIfValid(lastX.subtract(deltaX.sign()).numerator(), curY.numerator());
               } // if / else if
             } // if
-            includeIfValid(lastX, (int) curY);
-            curX += deltaX;
+            includeIfValid(lastX.numerator(), curY.numerator());
+            curX = curX.add(deltaX);
           } // curY
-          if (Math.abs((float) lastX - curX) >= 0.5) {
-            lastX += Math.signum(deltaX);
-            if (Math.abs(lastX - curX - Math.signum(deltaX)) - 0.5 < Math.abs(deltaX)) {
-              includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-            } else if (Math.abs(lastX - curX - Math.signum(deltaX)) - 0.5 > Math.abs(deltaX)) {
-              includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
+          if (lastX.subtract(curX).abs().greaterEq(new Fraction(1, 2))) {
+            if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+                .greater(new Fraction(1, 2))) {
+              lastX = lastX.add(deltaX.sign());
+              includeIfValid(lastX.numerator(), curY.subtract(deltaY.sign()).numerator());
+            } else if (lastX.subtract(curX).add(deltaX.divide(new Fraction(1, 2))).abs()
+                .less(new Fraction(1, 2))) {
+              lastX = lastX.add(deltaX.sign());
+              includeIfValid(lastX.subtract(deltaX.sign()).numerator(), curY.numerator());
             } // if / else if
           } // if
-          includeIfValid(lastX, (int) curY);
+          includeIfValid(lastX.numerator(), curY.numerator());
         } // if / else
       } // for [i]
     } else {
@@ -236,10 +257,28 @@ public class BezierCurveStamp implements AsciiBlock {
     } // if / else
   } // createData(int[], int[])
 
-  private float combinations(int n, int r) {
-    return (float) factorial(n) / (factorial(r) * factorial(n - r));
+  /**
+   * Return the count of combinations for n choose r.
+   *
+   * @param n
+   *   The total number of items to choose from
+   * @param r
+   *   The number of items being choosen
+   * @return
+   *   A fraction representing the combination count for n choose r
+   */
+  private Fraction combinations(int n, int r) {
+    return new Fraction(factorial(n), (factorial(r) * factorial(n - r)));
   } // combinations(int, int)
 
+  /**
+   * Returns the factorial of positive integer n.
+   *
+   * @param n
+   *   The number to get the factorial of (Assumed to be positive)
+   * @return
+   *   The factorial of n
+   */
   private int factorial(int n) {
     int output = 1;
     while (n > 0) {
@@ -249,6 +288,14 @@ public class BezierCurveStamp implements AsciiBlock {
     return output;
   } // factorial(int)
 
+  /**
+   * Adds a character at the coordinate if the coordinate is in bounds.
+   *
+   * @param xCoord
+   *   The y coordinate of the prospective point
+   * @param yCoord
+   *   The y coordinate of the prospective point
+   */
   private void includeIfValid(int xCoord, int yCoord) {
     if ((xCoord >= 0) && (xCoord < this.width()) && (yCoord >= 0) && (yCoord < this.height())) {
       stampData[yCoord][xCoord] = true;
@@ -277,7 +324,12 @@ public class BezierCurveStamp implements AsciiBlock {
    * @return true if the two blocks are structurally equivalent and
    *     false otherwise.
    */
-  public boolean eqv(Boxed other) {
-    return this.contents.eqv(other.contents);
-  } // eqv(Boxed)
+  public boolean eqv(BezierCurveStamp other) {
+    return this.contents.eqv(other.contents)
+      && (this.c == other.c)
+      && (this.polyDegree == other.polyDegree)
+      && (this.subdivisions == other.subdivisions)
+      && (this.xCoordArray == other.xCoordArray)
+      && (this.yCoordArray == other.yCoordArray);
+  } // eqv(BezierCurveStamp)
 } // class BezierCurveStamp

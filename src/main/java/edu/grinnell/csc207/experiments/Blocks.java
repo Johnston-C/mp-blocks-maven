@@ -190,17 +190,7 @@ public class Blocks {
     AsciiBlock.print(pen,
         new BezierCurveStamp(new Rect(' ', 21, 21),
             '*', 3, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
-    AsciiBlock.print(pen,
-        new BezierCurveStamp(new Rect(' ', 21, 21),
-            '*', 3, 100, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
-    AsciiBlock.print(pen,
-        new BezierCurveStamp(new Rect(' ', 21, 21),
-            '*', 1, 1, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
-    separator(pen);
-    AsciiBlock.print(pen,
-        new BezierCurveStamp(new Rect(' ', 21, 21),
-            '*', 1, 10, new int[]{10, 20, 20, 10}, new int[]{0, 0, 20, 20}));
     separator(pen);
     AsciiBlock.print(pen,
         new BezierCurveStamp(new Rect(' ', 21, 21),

@@ -28,6 +28,16 @@ public class BezierCurveStamp implements AsciiBlock {
   int subdivisions;
 
   /**
+   * The amount of subdivisions in each bezierCurve.
+   */
+  int[] xCoordArray;
+
+  /**
+   * The amount of subdivisions in each bezierCurve.
+   */
+  int[] yCoordArray;
+
+  /**
    * The data of the stamp.
    */
   boolean[][] stampData;
@@ -63,6 +73,8 @@ public class BezierCurveStamp implements AsciiBlock {
     this.c = ch;
     this.polyDegree = degree;
     this.subdivisions = divisions;
+    this.xCoordArray = xCoords;
+    this.yCoordArray = yCoords;
     this.stampData = new boolean[this.height()][this.width()];
     for (int i = 0; i < contents.height(); i++) {
       for (int j = 0; j < contents.width(); j++) {
@@ -161,7 +173,8 @@ public class BezierCurveStamp implements AsciiBlock {
           deltaY = (float) (refinedYData[i + 1] - refinedYData[i])
                    / Math.abs(refinedXData[i + 1] - refinedXData[i]);
           lastY = (int) curY;
-          for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1]; curX += deltaX) {
+          for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1] - deltaX;
+               curX += deltaX) {
             if (Math.abs((float) lastY - curY) >= 0.5) {
               lastY += Math.signum(deltaY);
               if (Math.abs(lastY - curY - Math.signum(deltaY) * 0.5) < 0.5) {
@@ -173,21 +186,13 @@ public class BezierCurveStamp implements AsciiBlock {
             includeIfValid((int) curX, lastY);
             curY += deltaY;
           } // for (curX)
-          if (Math.abs((float) lastY - curY) >= 0.5) {
-            lastY += Math.signum(deltaY);
-            if (Math.abs(lastY - curY - Math.signum(deltaY) * 0.5) < 0.5) {
-              includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-            } else if (Math.abs(lastY - curY - Math.signum(deltaY) * 0.5) > 0.5) {
-              includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
-            } // if / else if
-          } // if
-          includeIfValid((int) curX, lastY);
         } else {
           deltaY = Math.signum(refinedYData[i + 1] - refinedYData[i]);
           deltaX = (float) (refinedXData[i + 1] - refinedXData[i])
                    / Math.abs(refinedYData[i + 1] - refinedYData[i]);
           lastX = (int) curX;
-          for (curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1]; curY += deltaY) {
+          for (curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1] - deltaY;
+               curY += deltaY) {
             if (Math.abs((float) lastX - curX) >= 0.5) {
               lastX += Math.signum(deltaX);
               if (Math.abs(lastX - curX - Math.signum(deltaX) * 0.5) < 0.5) {
@@ -198,16 +203,7 @@ public class BezierCurveStamp implements AsciiBlock {
             } // if
             includeIfValid(lastX, (int) curY);
             curX += deltaX;
-          } // curY
-          if (Math.abs((float) lastX - curX) >= 0.5) {
-            lastX += Math.signum(deltaX);
-            if (Math.abs(lastX - curX - Math.signum(deltaX) * 0.5) < 0.5) {
-              includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-            } else if (Math.abs(lastX - curX - Math.signum(deltaX) * 0.5) > 0.5) {
-              includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
-            } // if / else if
-          } // if
-          includeIfValid(lastX, (int) curY);
+          } // for (curY)
         } // if / else
       } // for [i]
     } else {
@@ -244,7 +240,7 @@ public class BezierCurveStamp implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    return false;
   } // eqv(AsciiBlock)
 
   /**
@@ -256,7 +252,12 @@ public class BezierCurveStamp implements AsciiBlock {
    * @return true if the two blocks are structurally equivalent and
    *     false otherwise.
    */
-  public boolean eqv(Boxed other) {
-    return this.contents.eqv(other.contents);
-  } // eqv(Boxed)
+  public boolean eqv(BezierCurveStamp other) {
+    return this.contents.eqv(other.contents)
+      && (this.c == other.c)
+      && (this.polyDegree == other.polyDegree)
+      && (this.subdivisions == other.subdivisions)
+      && (this.xCoordArray == other.xCoordArray)
+      && (this.yCoordArray == other.yCoordArray);
+  } // eqv(BezierCurveStamp)
 } // class BezierCurveStamp

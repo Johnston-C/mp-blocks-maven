@@ -72,8 +72,8 @@ public class VComp implements AsciiBlock {
    *   if i is outside the range of valid rows.
    */
   public String row(int i) throws Exception {
-    if((i >= 0) && (i < this.height())){
-      String output ="";
+    if ((i >= 0) && (i < this.height())) {
+      String output = "";
       for (int block = 0; block < this.blocks.length; block++) {
         if (this.blocks[block].height() > i) {
           output = this.blocks[block].row(i);
@@ -103,9 +103,9 @@ public class VComp implements AsciiBlock {
    */
   public int height() {
     int h = 0;
-    for(AsciiBlock block : this.blocks){
+    for (AsciiBlock block : this.blocks) {
       h += block.height();
-    }
+    } // foreach [block]
     return h;
   } // height()
 
@@ -116,9 +116,9 @@ public class VComp implements AsciiBlock {
    */
   public int width() {
     int w = 0;
-    for(AsciiBlock block : this.blocks){
-      w = Math.max(w,block.width());
-    }
+    for (AsciiBlock block : this.blocks) {
+      w = Math.max(w, block.width());
+    } // foreach [block]
     return w;
   } // width()
 
@@ -133,16 +133,16 @@ public class VComp implements AsciiBlock {
    */
   public boolean eqv(AsciiBlock other) {
     if (other instanceof VComp) {
-      return this.eqv((VComp) other); 
-    }
-    return false; 
+      return this.eqv((VComp) other);
+    } // if
+    return false;
   } // eqv(AsciiBlock)
 
   /**
    * This method compares the horizontal alignment, the number of blocks,
    * and iterates through each block to check structural equivalence using
    * their respective eqv methods.
-   * 
+   *
    * @param other the VComp block to compare to this block.
    * @return true if the two VComp blocks are structurally equivalent,
    *         false otherwise.
@@ -150,16 +150,15 @@ public class VComp implements AsciiBlock {
   public boolean eqv(VComp other) {
     if (this.align != other.align) {
       return false;
-    }
+    } // if
     if (this.blocks.length != other.blocks.length) {
       return false;
-    }
+    } // if
     for (int i = 0; i < this.blocks.length; i++) {
       if (!this.blocks[i].eqv(other.blocks[i])) {
         return false;
-      }
-    }
-    return true;  
-  }
-
+      } // if
+    } // for [i]
+    return true;
+  } // eqv(VComp)
 } // class VComp

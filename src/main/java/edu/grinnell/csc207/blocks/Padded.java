@@ -86,16 +86,17 @@ public class Padded implements AsciiBlock {
    *   If the row is invalid.
    */
   public String row(int i) throws Exception {
-    if((i < 0) || (i >= this.height())) {
-      throw new Exception("Not yet implemented"); // STUB
-    }
+    if ((i < 0) || (i >= this.height())) {
+      throw new Exception("Invalid row " + i);
+    } // if
     int smallerPadV = (this.height() - this.block.height()) / 2;
     int largerPadV = (this.height() - this.block.height() + 1) / 2;
     int smallerPadH = (this.height() - this.block.height()) / 2;
     int largerPadH = (this.height() - this.block.height() + 1) / 2;
     if ((this.valign.equals(VAlignment.TOP)) && (i < smallerPadV + largerPadV)) {
       return this.pad.repeat(this.width());
-    } else if ((this.valign.equals(VAlignment.CENTER)) && ((i < smallerPadV) || (i > smallerPadV + this.height()))) {
+    } else if ((this.valign.equals(VAlignment.CENTER)) && ((i < smallerPadV)
+              || (i > smallerPadV + this.height()))) {
       return this.pad.repeat(this.width());
     } else if ((this.valign.equals(VAlignment.BOTTOM)) && (i > this.height())) {
       return this.pad.repeat(this.width());
@@ -107,7 +108,7 @@ public class Padded implements AsciiBlock {
         output = this.block.row(i - smallerPadV);
       } else {
         output = this.block.row(i - smallerPadV - largerPadV);
-      }
+      } // if / else if / else
       if (this.halign.equals(HAlignment.LEFT)) {
         return output + this.pad.repeat(smallerPadH + largerPadH);
       } else if (this.halign.equals(HAlignment.CENTER)) {
@@ -160,10 +161,10 @@ public class Padded implements AsciiBlock {
    */
   public boolean eqv(Padded other) {
     return (this.block.eqv(other.block))
-    && (this.halign == other.halign)
-    && (this.height == other.height)
-    && (this.pad.equals(other.pad))
-    && (this.valign == other.valign)
-    && (this.width == other.width);
+      && (this.halign == other.halign)
+      && (this.height == other.height)
+      && (this.pad.equals(other.pad))
+      && (this.valign == other.valign)
+      && (this.width == other.width);
   } // eqv(AsciiBlock)
 } // class Padded

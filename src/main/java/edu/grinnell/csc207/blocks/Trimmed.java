@@ -150,9 +150,9 @@ public class Trimmed implements AsciiBlock {
  */
   public boolean eqv(Trimmed other) {
     return (this.block.eqv(other.block))
-    && (this.halign == other.halign)
-    && (this.height == other.height)
-    && (this.valign == other.valign)
-    && (this.width == other.width);
+      && (this.halign == other.halign)
+      && (this.height == other.height)
+      && (this.valign == other.valign)
+      && (this.width == other.width);
   } // eqv(Trimmed)
 } // class Trimmed

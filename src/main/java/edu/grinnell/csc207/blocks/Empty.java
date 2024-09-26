@@ -64,7 +64,16 @@ public class Empty implements AsciiBlock {
     return other instanceof Empty;
   } // eqv(AsciiBlock)
 
+  /**
+   * Determine if another empty block is structurally equivalent to this block.
+   *
+   * @param other
+   *   The block to compare to this block.
+   *
+   * @return true if the two blocks are structurally equivalent and
+   *    false otherwise.
+   */
   public boolean eqv(Empty other) {
-    return true;
+    return other instanceof Empty;
   } // eqv(AsciiBlock)
 } // class Empty

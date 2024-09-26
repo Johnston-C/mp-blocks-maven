@@ -125,13 +125,13 @@ public class Lines implements AsciiBlock {
    */
   public boolean eqv(Lines other) {
     if ((this.lines.length == other.lines.length) && (this.width == other.width)) {
-      for(int i = 0; i < lines.length; i++) {
-        if(!(this.lines[i].equals(other.lines[i]))) {
+      for (int i = 0; i < lines.length; i++) {
+        if (!(this.lines[i].equals(other.lines[i]))) {
           return false;
-        }
-      }
+        } // if
+      } // for [i]
       return true;
-    }
+    } // if
     return false;
   } // eqv(AsciiBlock)
 } // class Lines

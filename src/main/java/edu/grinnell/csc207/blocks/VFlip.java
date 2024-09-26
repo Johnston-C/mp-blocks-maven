@@ -48,7 +48,7 @@ public class VFlip implements AsciiBlock {
     if ((i >= 0) && (i < this.height())) {
       return this.block.row(this.height() - 1 - i);
     } else {
-      throw new Exception("Not yet implemented"); // STUB
+      throw new Exception("Invalid row " + i);
     }
   } // row(int)
 

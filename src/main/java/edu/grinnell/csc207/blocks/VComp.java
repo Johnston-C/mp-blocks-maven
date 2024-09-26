@@ -74,8 +74,6 @@ public class VComp implements AsciiBlock {
   public String row(int i) throws Exception {
     if((i >= 0) && (i < this.height())){
       String output ="";
-      int smallerHalfCt = (this.width() - output.length()) / 2;
-      int largerHalfCt = (this.width() - output.length() + 1) / 2;
       for (int block = 0; block < this.blocks.length; block++) {
         if (this.blocks[block].height() > i) {
           output = this.blocks[block].row(i);
@@ -84,6 +82,8 @@ public class VComp implements AsciiBlock {
           i -= this.blocks[block].height();
         } // if / else
       } // for [block]
+      int smallerHalfCt = (this.width() - output.length()) / 2;
+      int largerHalfCt = (this.width() - output.length() + 1) / 2;
       if (this.align.equals(HAlignment.LEFT)) {
         return output + " ".repeat(smallerHalfCt + largerHalfCt);
       } else if (this.align.equals(HAlignment.CENTER)) {

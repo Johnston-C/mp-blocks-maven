@@ -90,7 +90,7 @@ public class BezierCurveStamp implements AsciiBlock {
     } catch (Exception e) {
       System.err.println("Bad Argument: No stamp generated.");
     } // try / catch [Exception]
-  } // Boxed(AsciiBlock)
+  } // BezierCurveStamp(AsciiBlock, char, int, int, int[], int[])
 
   // +---------+-----------------------------------------------------------
   // | Methods |

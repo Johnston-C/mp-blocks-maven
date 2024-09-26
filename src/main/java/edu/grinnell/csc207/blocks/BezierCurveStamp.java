@@ -195,8 +195,7 @@ public class BezierCurveStamp implements AsciiBlock {
             curY += deltaY;
           } // for [k]
           // Add the new point (curX, curY) to the refined_Data variables at
-          // the appropriate location. NOTE: rounding discrepancies make it so
-          // that BezierCurveStamp is order dependent for the point arrays.
+          // the appropriate location.
           refinedXData[(int) (i * this.subdivisions + j)] = Math.round(curX);
           refinedYData[(int) (i * this.subdivisions + j)] = Math.round(curY);
         } // for [j]
@@ -290,7 +289,7 @@ public class BezierCurveStamp implements AsciiBlock {
     } else {
       throw new Exception("Bad Data Count");
     } // if / else
-  } // createData(int[], int[])
+  } // createData()
 
   /**
    * Return the count of combinations of n choose r.

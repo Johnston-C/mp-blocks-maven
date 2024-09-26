@@ -10,6 +10,7 @@ import edu.grinnell.csc207.blocks.BezierCurveStamp;
 import edu.grinnell.csc207.blocks.Empty;
 import edu.grinnell.csc207.blocks.Rect;
 import edu.grinnell.csc207.blocks.VFlip;
+
 /**
  * Tests of the new block.
  */

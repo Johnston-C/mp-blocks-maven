@@ -89,7 +89,7 @@ public class BezierCurveStamp implements AsciiBlock {
     // If the arguments were bad, print out an error message.
     } catch (Exception e) {
       System.err.println("Bad Argument: No stamp generated.");
-    }
+    } // try / catch [Exception]
   } // Boxed(AsciiBlock)
 
   // +---------+-----------------------------------------------------------
@@ -281,10 +281,28 @@ public class BezierCurveStamp implements AsciiBlock {
     } // if / else
   } // createData(int[], int[])
 
+  /**
+   * Return the count of combinations of n choose r.
+   *
+   * @param n
+   *   The number of objects.
+   * @param r
+   *   The number of selections.
+   * @return
+   *   The count of combinations
+   */
   private float combinations(int n, int r) {
     return (float) factorial(n) / (factorial(r) * factorial(n - r));
   } // combinations(int, int)
 
+  /**
+   * Returns the factiorial of positive integer n.
+   *
+   * @param n
+   *   The number to get the factorial of.
+   * @return
+   *   The factorial of n.
+   */
   private int factorial(int n) {
     int output = 1;
     while (n > 0) {
@@ -294,6 +312,14 @@ public class BezierCurveStamp implements AsciiBlock {
     return output;
   } // factorial(int)
 
+  /**
+   * Attempts to include point (xCoord, yCoord) in the stamp data.
+   *
+   * @param xCoord
+   *   The x coordinate of the new point.
+   * @param yCoord
+   *   The y coordinate of the new point.
+   */
   private void includeIfValid(int xCoord, int yCoord) {
     if ((xCoord >= 0) && (xCoord < this.width()) && (yCoord >= 0) && (yCoord < this.height())) {
       stampData[yCoord][xCoord] = true;

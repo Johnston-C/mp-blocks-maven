@@ -296,7 +296,7 @@ public class BezierCurveStamp implements AsciiBlock {
    *   The count of combinations
    */
   private float combinations(int n, int r) {
-    return (float) factorial(n) / (factorial(r) * factorial(n - r));
+    return (float) (factorial(n) / (factorial(r) * factorial(n - r)));
   } // combinations(int, int)
 
   /**

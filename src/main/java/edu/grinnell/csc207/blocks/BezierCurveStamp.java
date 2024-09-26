@@ -28,14 +28,14 @@ public class BezierCurveStamp implements AsciiBlock {
   int subdivisions;
 
   /**
-   * The amount of subdivisions in each bezierCurve.
+   * The x coordinates for the points the curve is defined by.
    */
-  int[] xCoordArray;
+  int[] xData;
 
   /**
-   * The amount of subdivisions in each bezierCurve.
+   * The y coordinates for the points the curve is defined by.
    */
-  int[] yCoordArray;
+  int[] yData;
 
   /**
    * The data of the stamp.
@@ -74,8 +74,8 @@ public class BezierCurveStamp implements AsciiBlock {
     this.c = ch;
     this.polyDegree = degree;
     this.subdivisions = divisions;
-    this.xCoordArray = xCoords;
-    this.yCoordArray = yCoords;
+    this.xData = xCoords;
+    this.yData = yCoords;
     this.stampData = new boolean[this.height()][this.width()];
     // Fill stampData with false values.
     for (int i = 0; i < contents.height(); i++) {
@@ -85,7 +85,7 @@ public class BezierCurveStamp implements AsciiBlock {
     } // for [i]
     // Attempt to create the data of the stamp.
     try {
-      createData(xCoords, yCoords);
+      createData();
     // If the arguments were bad, print out an error message.
     } catch (Exception e) {
       System.err.println("Bad Argument: No stamp generated.");
@@ -141,7 +141,14 @@ public class BezierCurveStamp implements AsciiBlock {
     return this.contents.width();
   } // width()
 
-  private void createData(int[] xData, int[] yData) throws Exception {
+  /**
+   * Creates the curve data by approximating points on the curve and linearly
+   * interpolating them.
+   *
+   * @throws Exception
+   *   If the data is not of appropriate length, throw a generic Exception.
+   */
+  private void createData() throws Exception {
     // If the count of x coordinates and y coordinates is equal and there is one more data point
     // than a multiple of the degree ...
     if ((xData.length == yData.length) && (xData.length % this.polyDegree == 1 % this.polyDegree)) {
@@ -357,7 +364,7 @@ public class BezierCurveStamp implements AsciiBlock {
       && (this.c == other.c)
       && (this.polyDegree == other.polyDegree)
       && (this.subdivisions == other.subdivisions)
-      && (this.xCoordArray == other.xCoordArray)
-      && (this.yCoordArray == other.yCoordArray);
+      && (this.xData == other.xData)
+      && (this.yData == other.yData);
   } // eqv(BezierCurveStamp)
 } // class BezierCurveStamp

@@ -101,7 +101,7 @@ public class Boxed implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;
+    return ((other instanceof Boxed) && (this.eqv((Boxed) other)));
   } // eqv(AsciiBlock)
 
   /**

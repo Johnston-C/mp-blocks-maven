@@ -173,19 +173,20 @@ public class BezierCurveStamp implements AsciiBlock {
           for (int k = 0; k <= this.polyDegree; k++) {
             // Generate the weight point k has on curve i at approximated point j.
             // Do this by multiplying each point j by nCr(degree, k),
-            // (j / subdivisions)^(k), and (1 - j / subdivisions)^(degree - k).
+            // (j / subdivisions)^(k), and ((subdivisions - j) / subdivisions)^(degree - k).
             deltaX = xData[i * this.polyDegree + k] * combinations(this.polyDegree, k)
                      * (float) (Math.pow(j / this.subdivisions, k)
-                     * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
+                     * Math.pow((this.subdivisions - j) / this.subdivisions, this.polyDegree - k));
             deltaY = yData[i * this.polyDegree + k] * combinations(this.polyDegree, k)
                      * (float) (Math.pow(j / this.subdivisions, k)
-                     * Math.pow(1.0 - (j / this.subdivisions), this.polyDegree - k));
+                     * Math.pow((this.subdivisions - j) / this.subdivisions, this.polyDegree - k));
             // Add the weight point k has on curve i at approximated point j to curX and curY.
             curX += deltaX;
             curY += deltaY;
           } // for [k]
           // Add the new point (curX, curY) to the refined_Data variables at
-          // the appropriate location.
+          // the appropriate location. NOTE: rounding discrepancies make it so
+          // that BezierCurveStamp is order dependent for the point arrays.
           refinedXData[(int) (i * this.subdivisions + j)] = Math.round(curX);
           refinedYData[(int) (i * this.subdivisions + j)] = Math.round(curY);
         } // for [j]

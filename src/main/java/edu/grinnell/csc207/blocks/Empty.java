@@ -74,6 +74,6 @@ public class Empty implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(Empty other) {
-    return other instanceof Empty;
-  } // eqv(AsciiBlock)
+    return true;
+  } // eqv(Empty)
 } // class Empty

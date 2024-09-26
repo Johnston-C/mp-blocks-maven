@@ -173,13 +173,13 @@ public class BezierCurveStamp implements AsciiBlock {
           deltaY = (float) (refinedYData[i + 1] - refinedYData[i])
                    / Math.abs(refinedXData[i + 1] - refinedXData[i]);
           lastY = (int) curY;
-          for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1] - deltaX;
+          for (curX = refinedXData[i]; (int) curX != (int) refinedXData[i + 1] + deltaX;
                curX += deltaX) {
             if (Math.abs((float) lastY - curY) >= 0.5) {
               lastY += Math.signum(deltaY);
-              if (Math.abs(lastY - curY - Math.signum(deltaY) * 0.5) < 0.5) {
+              if (Math.abs(lastY - curY - deltaY * 0.5) < 0.5) {
                 includeIfValid((int) curX,  lastY - (int) Math.signum(deltaY));
-              } else if (Math.abs(lastY - curY - Math.signum(deltaY) * 0.5) > 0.5) {
+              } else if (Math.abs(lastY - curY - deltaY * 0.5) > 0.5) {
                 includeIfValid((int) curX - (int) Math.signum(deltaX),  lastY);
               } // if / else if
             } // if
@@ -191,13 +191,13 @@ public class BezierCurveStamp implements AsciiBlock {
           deltaX = (float) (refinedXData[i + 1] - refinedXData[i])
                    / Math.abs(refinedYData[i + 1] - refinedYData[i]);
           lastX = (int) curX;
-          for (curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1] - deltaY;
+          for (curY = refinedYData[i]; (int) curY != (int) refinedYData[i + 1] + deltaY;
                curY += deltaY) {
             if (Math.abs((float) lastX - curX) >= 0.5) {
               lastX += Math.signum(deltaX);
-              if (Math.abs(lastX - curX - Math.signum(deltaX) * 0.5) < 0.5) {
+              if (Math.abs(lastX - curX - deltaX * 0.5) < 0.5) {
                 includeIfValid(lastX - (int) Math.signum(deltaX), (int) curY);
-              } else if (Math.abs(lastX - curX - Math.signum(deltaX) * 0.5) > 0.5) {
+              } else if (Math.abs(lastX - curX - deltaX * 0.5) > 0.5) {
                 includeIfValid(lastX, (int) curY - (int) Math.signum(deltaY));
               } // if / else if
             } // if

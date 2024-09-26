@@ -142,8 +142,8 @@ public class BezierCurveStamp implements AsciiBlock {
   } // width()
 
   /**
-   * Creates the curve data by approximating points on the curve and linearly
-   * interpolating them.
+   * Creates the curve data by approximating points on a possible
+   * series of curves and linearly interpolating them.
    *
    * @throws Exception
    *   If the data is not of appropriate length, throw a generic Exception.

@@ -1,6 +1,7 @@
 package edu.grinnell.csc207;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -80,11 +81,11 @@ public class TestNewBlock {
   // +-------+
 
   /**
-   * Are mirrored compositions mirrored?
+   * Are mirrored BezierCurveStamps whose points are mirrors equal?
    */
   @Test
   public void mirroredBCS() {
-    assertEquals(TestUtils.toString(bcsLTlBr5x5), TestUtils.toString(new VFlip(bcsLTrBl5x5)), "Horizontally mirrored are equal");
+    assertTrue(TestUtils.same(bcsLTlBr5x5,new VFlip(bcsLTrBl5x5)), "Horizontally mirrored are equal");
   } // placeholder()
 
   /**

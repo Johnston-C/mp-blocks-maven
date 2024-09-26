@@ -171,9 +171,12 @@ public class BezierCurveStamp implements AsciiBlock {
           curY = 0;
           // For each point relevant to curve i ...
           for (int k = 0; k <= this.polyDegree; k++) {
-            // Generate the weight point k has on curve i at approximated point j.
+            // The equation of a point along bezier curve is as follows:
+            // Summation (k=0 ; k<=degree) {t = k / degree; point(k) * combinations(degree, k) *
+            // (t ^ k) * ((1 - t) ^ (degree - k))}
+            // Thus, we need to generate the weight point k has on curve i at approximated point j.
             // Do this by multiplying each point j by nCr(degree, k),
-            // (j / subdivisions)^(k), and ((subdivisions - j) / subdivisions)^(degree - k).
+            // (j / subdivisions) ^ (k), and ((subdivisions - j) / subdivisions)^(degree - k).
             deltaX = xData[i * this.polyDegree + k] * combinations(this.polyDegree, k)
                      * (float) (Math.pow(j / this.subdivisions, k)
                      * Math.pow((this.subdivisions - j) / this.subdivisions, this.polyDegree - k));

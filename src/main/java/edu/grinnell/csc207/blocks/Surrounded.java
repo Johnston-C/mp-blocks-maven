@@ -3,6 +3,7 @@ package edu.grinnell.csc207.blocks;
 /**
  * A text block surrounded by a single letter.
  *
+ * @author Samuel A. Rebelsky
  * @author Cade Johnston
  * @author Nicky Moreno Gonzalez
  */

@@ -3,6 +3,7 @@ package edu.grinnell.csc207.blocks;
 /**
  * A grid of a single text block.
  *
+ * @author Samuel A. Rebelsky
  * @author Cade Johnston
  * @author Nicky Moreno Gonzalez
  */

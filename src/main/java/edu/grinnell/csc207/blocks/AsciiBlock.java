@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 /**
  * Blocks of ASCII text.
  *
+ * @author Samuel A. Rebelsky
  * @author Cade Johnston
  * @author Nicky Moreno Gonzalez
  */

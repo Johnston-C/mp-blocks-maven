@@ -4,6 +4,8 @@ package edu.grinnell.csc207.blocks;
  * One line of text. The line is mutable (that is, it can be changed).
  *
  * @author Samuel A. Rebelsky
+ * @author Cade Johnston
+ * @author Nicky Moreno Gonzalez
  */
 public class Line implements AsciiBlock {
   // +--------+------------------------------------------------------------

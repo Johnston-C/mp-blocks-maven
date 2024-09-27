@@ -5,6 +5,7 @@ import java.util.Arrays;
 /**
  * The horizontal composition of blocks.
  *
+ * @author Samuel A. Rebelsky
  * @author Cade Johnston
  * @author Nicky Moreno Gonzalez
  */
